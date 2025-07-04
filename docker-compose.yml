@@ -1,0 +1,85 @@
+version: '3.8' # 这行可以删除，如之前的警告所示
+
+services:
+  # 1. 修改MySQL数据库服务，添加healthcheck
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-saas-db
+    environment:
+      MYSQL_ROOT_PASSWORD: naochuli456
+      MYSQL_DATABASE: collaborative_office
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    restart: always
+    # ▼▼▼ 添加下面这个健康检查部分 ▼▼▼
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pnaochuli456"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # 2. 修改identity-service，让它等待数据库“健康”
+  identity-service:
+    container_name: identity-service
+    build:
+      context: .
+      dockerfile: CollaborativeOffice.IdentityService/Dockerfile
+    ports:
+      - "7243:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=mysql-db;Port=3306;Database=collaborative_office;Uid=root;Pwd=naochuli456;
+    # ▼▼▼ 修改depends_on ▼▼▼
+    depends_on:
+      mysql-db:
+        condition: service_healthy # 等待mysql-db的健康检查通过
+
+  # 3. 修改project-service，让它也等待数据库“健康”
+  project-service:
+    container_name: project-service
+    build:
+      context: .
+      dockerfile: CollaborativeOffice.ProjectService/Dockerfile
+    ports:
+      - "7217:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=mysql-db;Port=3306;Database=collaborative_office;Uid=root;Pwd=naochuli456;
+    # ▼▼▼ 修改depends_on ▼▼▼
+    depends_on:
+      mysql-db:
+        condition: service_healthy # 等待mysql-db的健康检查通过
+
+  # 4. 网关服务保持不变
+  gateway-service:
+    container_name: gateway-service
+    build:
+      context: .
+      dockerfile: CollaborativeOffice.Gateway/Dockerfile
+    ports:
+      - "7077:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080
+    depends_on:
+      - identity-service
+      - project-service
+
+  frontend-service:
+    container_name: frontend-service
+    build:
+      context: /Users/xubolun/vsproject/vue1/frontend #告诉Docker在frontend文件夹里寻找Dockerfile
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80" # 将你Mac的5173端口映射到Nginx容器的80端口
+    depends_on:
+      - gateway-service # 它依赖于网关服务，确保网关先启动
+
+
+volumes:
+  mysql-data:

@@ -1,0 +1,6 @@
+@CollaborativeOffice.ProjectService_HostAddress = http://localhost:5219
+
+GET {{CollaborativeOffice.ProjectService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

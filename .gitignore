@@ -1,0 +1,23 @@
+# IDE-specific files
+.idea/
+.vscode/
+*.sln.DotSettings.user
+
+# .NET build artifacts
+[Bb]in/
+[Oo]bj/
+
+# Node.js dependencies
+node_modules/
+dist/
+npm-debug.log*
+yarn-error.log*
+pnpm-lock.yaml
+
+# User-specific files
+*.user
+*.suo
+
+# Environment files
+.env
+appsettings.Development.json
