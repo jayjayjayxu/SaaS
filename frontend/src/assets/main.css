@@ -1,0 +1,17 @@
+/* main.css (Corrected) */
+
+/* Keep this import, it resets basic browser styles. */
+@import './base.css';
+
+/* This is the code we added to make the root elements fill the screen. */
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* DELETE EVERYTHING ELSE THAT WAS BELOW THIS. 
+  The old code set a max-width and grid layout that we do not want.
+*/
