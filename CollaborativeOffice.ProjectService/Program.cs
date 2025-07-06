@@ -10,6 +10,8 @@ using CollaborativeOffice.ProjectService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 // --- 服务注册区域 ---
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -83,5 +85,4 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-
 app.Run();

@@ -8,6 +8,8 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 // --- 服务注册区域 ---
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -84,7 +86,6 @@ if (app.Environment.IsDevelopment())
 // 注意：顺序非常重要，必须在MapControllers之前
 app.UseAuthentication(); // 先启用认证
 app.UseAuthorization();  // 再启用授权
-
 app.MapControllers();
 
 app.Run();
