@@ -1,7 +1,7 @@
 ﻿# 使用微软官方的.NET SDK镜像作为构建环境
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-
+COPY ["NuGet.Config", "."]
 # 复制.csproj文件并恢复依赖项
 # 这种分层复制可以利用Docker的缓存机制，如果代码没变但依赖变了，可以只重新下载依赖
 COPY ["CollaborativeOffice.Gateway/CollaborativeOffice.Gateway.csproj", "CollaborativeOffice.Gateway/"]

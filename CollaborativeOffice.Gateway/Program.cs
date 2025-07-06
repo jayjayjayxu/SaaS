@@ -10,7 +10,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             // 确保这个端口号(5173)和你Vue开发服务器的端口号一致
-            policy.WithOrigins("http://localhost:5173", "http://localhost:5174") // 同时允许两个可能的端口
+            policy.WithOrigins("http://localhost:5173","http://115.190.155.213:5173", "http://xubolun123.top:5173","http://www.xubolun123.top:5173") 
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
