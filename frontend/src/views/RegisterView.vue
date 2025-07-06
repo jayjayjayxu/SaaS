@@ -24,6 +24,7 @@
 import { ref } from 'vue';
 import axios from 'axios'; // 导入axios
 import { useRouter } from 'vue-router'; // 导入useRouter用于页面跳转
+import apiClient from '@/services/apiClient';
 
 const username = ref('');
 const password = ref('');
@@ -38,7 +39,7 @@ const handleRegister = async () => {
 
   try {
     // 调用后端的注册API，注意地址是通过网关的
-    const response = await axios.post('http://localhost:7077/identity/api/auth/register', {
+    await apiClient.post('/identity/api/auth/register', {
       username: username.value,
       password: password.value
     });
