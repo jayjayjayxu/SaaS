@@ -17,7 +17,7 @@ pnpm-lock.yaml
 # User-specific files
 *.user
 *.suo
-
+.vs/
 # Environment files
 .env
 appsettings.Development.json
